@@ -64,12 +64,13 @@ public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.movement_swipe_layout);
         swipeLayout.setOnRefreshListener(this);
 
-
         return root;
     }
 
     private void setUpMovementRecords() {
-        mMovementRecords.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setReverseLayout(true);
+        mMovementRecords.setLayoutManager(linearLayoutManager);
         mMovementRecords.setAdapter(adapter);
 
     }
