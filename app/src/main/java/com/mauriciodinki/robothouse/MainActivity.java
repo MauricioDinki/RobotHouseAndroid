@@ -4,7 +4,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 
 import com.mauriciodinki.robothouse.ui.adapters.PageAdapter;
 
@@ -15,25 +14,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /* Add the toolbar to view */
-
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
-
-        /*Set the TabLayout to choose fragments*/
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        /*Tabs declaration*/
-
         TabLayout.Tab movementTab = tabLayout.newTab().setText("Movement");
 
-        /*Add tabs to TabLayout*/
-
         tabLayout.addTab(movementTab);
-
-        /*ViewPager Control*/
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 
@@ -59,6 +48,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 }

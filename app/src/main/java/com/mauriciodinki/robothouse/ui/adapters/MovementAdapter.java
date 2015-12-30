@@ -2,7 +2,6 @@ package com.mauriciodinki.robothouse.ui.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,23 +46,14 @@ public class MovementAdapter extends RecyclerView.Adapter<MovementAdapter.ViewHo
 
     public void addAll(@NonNull ArrayList<Movement> movements){
         if (movements == null)
-            throw  new NullPointerException("The items cannot be null");
+            throw new NullPointerException("The items cannot be null");
 
         this.movements.addAll(movements);
         notifyDataSetChanged();
     }
 
-    public void clearAll() {
-        this.movements.clear();
-        notifyDataSetChanged();
-    }
-
-    public ArrayList<Movement> getDataset (){
-        return  this.movements;
-    }
-
-    public void updateList(ArrayList<Movement> newData) {
-        this.movements = newData;
+    public void updateList(ArrayList<Movement> movements) {
+        this.movements = movements;
         notifyDataSetChanged();
     }
 
