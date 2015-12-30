@@ -2,14 +2,16 @@ package com.mauriciodinki.robothouse.ui.fragments;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,37 +31,17 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovementFragment extends Fragment {
+public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private ArrayList<Movement> dataset;
     private RecyclerView mMovementRecords;
     private MovementAdapter adapter;
+    private SwipeRefreshLayout swipeLayout;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        String URL = "http://robot.ngrok.io/movement";
-
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-
-        JsonArrayRequest request = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                dataset = new ArrayList<>();
-                dataset = parser(response);
-                adapter.addAll(dataset);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Error del request", error.toString());
-            }
-        });
-
-        queue.add(request);
-
+        getData();
     }
 
 
@@ -78,6 +60,10 @@ public class MovementFragment extends Fragment {
         mMovementRecords = (RecyclerView) root.findViewById(R.id.movement_recycler);
 
         setUpMovementRecords();
+
+        swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.movement_swipe_layout);
+        swipeLayout.setOnRefreshListener(this);
+
 
         return root;
     }
@@ -108,4 +94,66 @@ public class MovementFragment extends Fragment {
         return moveAux;
     }
 
+    public void getData () {
+
+        String URL = "http://robot.ngrok.io/movement";
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+
+        JsonArrayRequest request = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                dataset = new ArrayList<>();
+                dataset = parser(response);
+                /*Log.e("Data del Request", Integer.toString(dataset.size()));*/
+                adapter.addAll(dataset);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error del request", error.toString());
+            }
+        });
+
+        queue.add(request);
+
+    }
+
+    @Override
+    public void onRefresh() {
+        Toast.makeText(getActivity(), "Refresh", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                /*Log.e("Data Actual", Integer.toString(adapter.getDataset().size()));
+                adapter.clearAll();*/
+
+
+                String URL = "http://robot.ngrok.io/movement";
+
+                RequestQueue queue = Volley.newRequestQueue(getActivity());
+
+                JsonArrayRequest request = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        dataset = new ArrayList<>();
+                        dataset = parser(response);
+                        adapter.updateList(dataset);
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Error del request", error.toString());
+                    }
+                });
+
+                queue.add(request);
+
+
+                swipeLayout.setRefreshing(false);
+            }
+        }, 2000);
+    }
 }
