@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class MovementApiService {
 
     Context context;
-    String URL = "http://robot.ngrok.io/movement";
+    String URL = "https://young-beach-6344.herokuapp.com/movement";
     ArrayList <Movement> movements;
 
     public MovementApiService(Context context) {
