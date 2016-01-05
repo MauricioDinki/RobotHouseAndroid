@@ -3,11 +3,9 @@ package com.mauriciodinki.robothouse.io;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.mauriciodinki.robothouse.domain.Movement;
 
 import org.json.JSONArray;
@@ -29,10 +27,7 @@ public class MovementApiService {
         this.context = context;
     }
 
-
     public void getMovementData(final VolleyCallback callback){
-
-        RequestQueue queue = Volley.newRequestQueue(context);
 
         JsonArrayRequest request = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -47,7 +42,7 @@ public class MovementApiService {
             }
         });
 
-        queue.add(request);
+        InitialConfiguration.getInstance().getRequestQueue().add(request);
     }
 
     public ArrayList<Movement> parser (JSONArray response) {
